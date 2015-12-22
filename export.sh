@@ -1,7 +1,6 @@
 #!/bin/sh
 
 HOSTIP=`ip route show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print \$2 }'`	
-#HOSTIP="172.17.181.209"
 STATSD_HOST=$HOSTIP
 STATSD_PORT="8125"
 STATSD_PREFIX="locust"
