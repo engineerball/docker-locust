@@ -90,7 +90,6 @@ def init_grafana_dashboard():
 
 init_influxdb_()
 init_grafana_dashboard()
-print("%s", os.environ.get('STATSD_HOST', "http://127.0.0.1:8086"))
 
 class UserBehavior(TaskSet):
     @task(2)
