@@ -1,0 +1,50 @@
+locust:
+    image: engineerball/locust
+    ports:
+        - "8089:8089"
+        - "5000:5000"
+    links:
+        - influxdb
+        - statsd
+        - grafana
+    volumes:
+        - ./scenario/locustfile.py:/opt/scenario/locustfile.py
+        - ./scenario/dashboard.json:/opt/scenario/dashboard.json
+    working_dir: /opt/scenario
+    environment:
+        STATSD_HOST: statsd
+        STATSD_PORT: 8125
+        STATSD_PREFIX: locust
+        GRAFANA_URL: http://0.0.0.0:3000
+        GRAFANA_USER: admin
+        GRAFANA_PASSWORD: admin
+        INFLUXDB_USER: root
+        INFLUXDB_PASSWORD: root
+        INFLUXDB_HOST: http://0.0.0.0:8086
+statsd:
+    image: shakr/statsd-influxdb
+    ports:
+        - "8126:8126"
+        - "8125:8125/tcp"
+        - "8125:8125/udp"
+    environment:
+        INFLUXDB_HOST: influxdb
+        INFLUXDB_DATABASE: statsd
+        INFLUXDB_USERNAME: root
+        INFLUXDB_PASSWORD: root
+        STATSD_DEBUG: True
+    volumes:
+        - ./scenario/config.js:/statsd/config.js
+    links:
+        - influxdb
+influxdb:
+    image: tutum/influxdb:0.8.8
+    ports:
+        - "8083:8083"
+        - "8086:8086"
+    environment:
+        PRE_CREATE_DB: statsd
+grafana:
+    image: grafana/grafana:2.0.1
+    ports:
+        - "3000:3000"

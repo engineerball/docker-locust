@@ -1,0 +1,24 @@
+#!/bin/sh
+
+HOSTIP=`ip route show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print \$2 }'`	
+#HOSTIP="172.17.181.209"
+STATSD_HOST=$HOSTIP
+STATSD_PORT="8125"
+STATSD_PREFIX="locust"
+GRAFANA_URL="http://$HOSTIP:3000"
+GRAFANA_USER="admin"
+GRAFANA_PASSWORD="admin"
+INFLUXDB_USER="root"
+INFLUXDB_PASSWORD="root"
+INFLUXDB_HOST="http://$HOSTIP:8086"
+
+export STATSD_HOST
+export STATSD_PORT
+export STATSD_PREFIX
+export GRAFANA_URL
+export GRAFANA_USER
+export GRAFANA_PASSWORD
+export INFLUXDB_USER
+export INFLUXDB_PASSWORD
+export INFLUXDB_HOST
+export HOSTIP
